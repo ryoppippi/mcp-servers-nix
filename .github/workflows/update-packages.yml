@@ -16,6 +16,7 @@ jobs:
           - nd-mcp
           - playwright-mcp
           - serena
+          - slite-mcp-server
     steps:
       - name: Generate GitHub App token
         id: app-token
@@ -43,15 +44,17 @@ jobs:
         id: update-package
         run: |
           if [[ "${{ matrix.package }}" == "serena" ]]; then
-            VERSION_FLAG="--version=branch"
+            NIX_UPDATE_FLAGS="--version=branch"
           elif [[ "${{ matrix.package }}" == "mastra-mcp-docs-server" ]]; then
-            VERSION_FLAG='--version-regex @mastra/mcp-docs-server@(.*)'
+            NIX_UPDATE_FLAGS='--version-regex @mastra/mcp-docs-server@(.*)'
+          elif [[ "${{ matrix.package }}" == "slite-mcp-server" ]]; then
+            NIX_UPDATE_FLAGS='--generate-lockfile'
           else
-            VERSION_FLAG=""
+            NIX_UPDATE_FLAGS=""
           fi
 
           OUTPUT=$(nix run nixpkgs#nix-update \
-            -- --flake ${{ matrix.package }} $VERSION_FLAG --print-commit-message)
+            -- --flake ${{ matrix.package }} $NIX_UPDATE_FLAGS --print-commit-message)
 
           # Extract title (first line containing package name)
           COMMIT_TITLE=$(echo "$OUTPUT" | grep -E "^${{ matrix.package }}:" | head -1)
