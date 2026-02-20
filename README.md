@@ -291,6 +291,7 @@ The framework includes modules for the following MCP servers:
 - [clickup](./modules/clickup.nix)
 - [codex](./modules/codex.nix)
 - [context7](./modules/context7.nix)
+- [deepl](./modules/deepl.nix)
 - [esa](./modules/esa.nix)
 - [everything](./modules/everything.nix)
 - [fetch](./modules/fetch.nix)
@@ -306,8 +307,10 @@ The framework includes modules for the following MCP servers:
 - [playwright](./modules/playwright.nix)
 - [sequential-thinking](./modules/sequential-thinking.nix)
 - [serena](./modules/serena.nix)
+- [slite](./modules/slite.nix)
 - [tavily](./modules/tavily.nix)
 - [terraform](./modules/terraform.nix)
+- [textlint](./modules/textlint.nix)
 - [time](./modules/time.nix)
 
 ## Adding Custom Servers
