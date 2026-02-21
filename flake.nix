@@ -34,6 +34,22 @@
             };
           }
         ))
+        (forAllSystems (
+          system:
+          let
+            pkgs = import nixpkgs {
+              inherit system;
+              # playwright.executable defaults to google-chrome (unfree) on macOS
+              config = {
+                allowUnfree = true;
+                allowInsecurePredicate = _: true;
+              };
+            };
+          in
+          {
+            module-options-doc = (import ./docs/options-doc.nix { inherit pkgs; }).check;
+          }
+        ))
         self.packages
       ];
     };
