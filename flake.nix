@@ -23,6 +23,33 @@
 
       overlays.default = import ./overlays;
 
+      formatter = forAllSystems (
+        system:
+        let
+          pkgs = import nixpkgs { inherit system; };
+          update-module-docs = pkgs.writeShellApplication {
+            name = "update-module-docs";
+            runtimeInputs = [
+              pkgs.coreutils
+              pkgs.nix
+            ];
+            text = ''
+              generated=$(nix build --no-link --print-out-paths -f docs/options-doc.nix optionsCommonMark)
+              install -m 644 "$generated" docs/module-options.md
+            '';
+          };
+        in
+        pkgs.nixfmt-tree.override {
+          runtimeInputs = [ update-module-docs ];
+          settings = {
+            formatter.module-docs = {
+              command = "update-module-docs";
+              includes = [ "*.nix" ];
+            };
+          };
+        }
+      );
+
       checks = lib.foldr (x: acc: lib.recursiveUpdate x acc) { } [
         (forAllSystems (system: import ./tests { pkgs = import nixpkgs { inherit system; }; }))
         (forAllSystems (
